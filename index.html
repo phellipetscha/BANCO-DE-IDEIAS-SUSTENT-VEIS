@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoVida - Ideias Sustentáveis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn.active {
+            background: #2e7d32;
+        }
+
+        .section {
+            display: none;
+            padding: 3rem 0;
+            min-height: 70vh;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radio-option input[type="radio"] {
+            width: auto;
+        }
+
+        .btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            border: 2px solid #4caf50;
+            text-align: center;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 15px;
+        }
+
+        .carbon-result {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 1rem 0;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .tip-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .tip-card h4 {
+            color: #2e7d32;
+            margin-bottom: 1rem;
+        }
+
+        .chart-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .intro-text {
+            font-size: 1.1rem;
+            text-align: center;
+            margin: 2rem 0;
+            color: #555;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8e6cf 0%, #dcedc1 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 200px;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🌱 EcoVida</h1>
+            <p class="subtitle">Transformando ideias em ações sustentáveis</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showSection('home')">Início</button>
+                <button class="nav-btn" onclick="showSection('calculator')">Calculadora de Carbono</button>
+                <button class="nav-btn" onclick="showSection('guide')">Guia Escolar</button>
+                <button class="nav-btn" onclick="showSection('mapping')">Mapeamento</button>
+                <button class="nav-btn" onclick="showSection('ideas')">Banco de Ideias</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Seção Inicial -->
+        <section id="home" class="section active">
+            <div class="card">
+                <h2>🌍 Bem-vindo ao EcoVida</h2>
+                <p class="intro-text">
+                    Sua plataforma completa para um estilo de vida mais sustentável. Descubra ferramentas práticas 
+                    para reduzir seu impacto ambiental e contribuir para um futuro mais verde.
+                </p>
+                
+                <div class="highlight">
+                    <h3>🎯 Nossos Objetivos</h3>
+                    <ul style="margin: 1rem 0; padding-left: 2rem;">
+                        <li>Conscientizar sobre o impacto ambiental individual</li>
+                        <li>Promover práticas sustentáveis no dia a dia</li>
+                        <li>Conectar iniciativas sustentáveis da comunidade</li>
+                        <li>Compartilhar ideias práticas para um mundo melhor</li>
+                    </ul>
+                </div>
+
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h4>📊 Calculadora de Pegada de Carbono</h4>
+                        <p>Descubra seu impacto ambiental e receba dicas personalizadas para reduzi-lo.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>🏫 Guia Escolar Sustentável</h4>
+                        <p>Práticas sustentáveis para implementar no ambiente educacional.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>🗺️ Mapeamento Comunitário</h4>
+                        <p>Encontre e cadastre iniciativas sustentáveis na sua região.</p>
+                    </div>
+                    <div class="tip-card">
+                        <h4>💡 Banco de Ideias</h4>
+                        <p>Compartilhe e descubra ideias criativas para o dia a dia sustentável.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculadora de Pegada de Carbono -->
+        <section id="calculator" class="section">
+            <div class="card">
+                <h2>🌿 Calculadora de Pegada de Carbono</h2>
+                <p class="intro-text">
+                    A pegada de carbono representa a quantidade total de gases de efeito estufa emitidos 
+                    direta ou indiretamente por suas atividades. Calcule a sua e descubra como reduzi-la!
+                </p>
+
+                <form id="carbonForm">
+                    <div class="form-group">
+                        <label>🏠 Consumo mensal de energia elétrica (kWh):</label>
+                        <input type="number" id="energy" min="0" placeholder="Ex: 150" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🚗 Quantos km você percorre por mês de carro?</label>
+                        <input type="number" id="carKm" min="0" placeholder="Ex: 1000">
+                    </div>
+
+                    <div class="form-group">
+                        <label>✈️ Quantos voos você faz por ano?</label>
+                        <select id="flights" required>
+                            <option value="0">Nenhum</option>
+                            <option value="1">1-2 voos</option>
+                            <option value="3">3-5 voos</option>
+                            <option value="6">Mais de 5 voos</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🥩 Qual seu tipo de dieta?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="diet1" name="diet" value="high" required>
+                                <label for="diet1">Rica em carne</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="diet2" name="diet" value="medium">
+                                <label for="diet2">Moderada</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="diet3" name="diet" value="low">
+                                <label for="diet3">Vegetariana/Vegana</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🛍️ Frequência de compras de roupas/eletrônicos:</label>
+                        <select id="shopping" required>
+                            <option value="high">Frequentemente (mensal)</option>
+                            <option value="medium">Moderadamente (trimestral)</option>
+                            <option value="low">Raramente (anual)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn">Calcular Minha Pegada de Carbono</button>
+                </form>
+
+                <div id="results" style="display: none;">
+                    <div class="result-card">
+                        <h3>🌍 Sua Pegada de Carbono Anual</h3>
+                        <div class="carbon-result" id="carbonResult">0</div>
+                        <p>toneladas de CO₂ equivalente por ano</p>
+                        <p style="margin-top: 1rem; color: #666;">
+                            Média brasileira: ~2.3 toneladas | Média mundial: ~4.8 toneladas
+                        </p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="carbonChart"></canvas>
+                    </div>
+
+                    <h3>💚 Dicas para Reduzir sua Pegada de Carbono</h3>
+                    <div class="tips-grid" id="tipsContainer">
+                        <!-- Dicas serão inseridas aqui dinamicamente -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Guia de Consumo Consciente -->
+        <section id="guide" class="section">
+            <div class="card">
+                <h2>🏫 Guia de Consumo Consciente na Escola</h2>
+                <p class="intro-text">
+                    Transforme sua escola em um ambiente mais sustentável com práticas simples 
+                    que fazem a diferença para o planeta e para a comunidade escolar.
+                </p>
+
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <h4>💧 Economia de Água</h4>
+                        <ul>
+                            <li>Feche a torneira ao escovar os dentes</li>
+                            <li>Reporte vazamentos imediatamente</li>
+                            <li>Use copos reutilizáveis nos bebedouros</li>
+                            <li>Colete água da chuva para regar plantas</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-card">
+                        <h4>⚡ Economia de Energia</h4>
+                        <ul>
+                            <li>Desligue luzes ao sair da sala</li>
+                            <li>Aproveite a luz natural sempre que possível</li>
+                            <li>Desligue equipamentos em standby</li>
+                            <li>Use ventiladores em vez de ar condicionado</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-card">
+                        <h4>♻️ Gestão de Resíduos</h4>
+                        <ul>
+                            <li>Separe o lixo corretamente</li>
+                            <li>Reutilize papel usado como rascunho</li>
+                            <li>Evite produtos descartáveis</li>
+                            <li>Crie uma composteira escolar</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-card">
+                        <h4>🥗 Alimentação Sustentável</h4>
+                        <ul>
+                            <li>Evite o desperdício de alimentos</li>
+                            <li>Prefira produtos locais e orgânicos</li>
+                            <li>Use garrafas e lancheiras reutilizáveis</li>
+                            <li>Crie uma horta escolar</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-card">
+                        <h4>📚 Materiais Escolares</h4>
+                        <ul>
+                            <li>Reutilize cadernos e materiais</li>
+                            <li>Compartilhe materiais com colegas</li>
+                            <li>Prefira produtos reciclados</li>
+                            <li>Doe materiais que não usa mais</li>
+                        </ul>
+                    </div>
+
+                    <div class="tip-card">
+                        <h4>🌱 Educação Ambiental</h4>
+                        <ul>
+                            <li>Organize campanhas de conscientização</li>
+                            <li>Crie clubes de sustentabilidade</li>
+                            <li>Promova feiras de ciências ambientais</li>
+                            <li>Convide especialistas para palestras</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="highlight">
+                    <h3>🎯 Quiz: Teste seus Conhecimentos!</h3>
+                    <div id="quiz">
+                        <div id="quizQuestion">
+                            <p><strong>Pergunta 1:</strong> Qual a melhor forma de economizar água na escola?</p>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="q1" value="a" id="q1a">
+                                    <label for="q1a">Deixar a torneira pingando</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q1" value="b" id="q1b">
+                                    <label for="q1b">Fechar bem as torneiras após o uso</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q1" value="c" id="q1c">
+                                    <label for="q1c">Usar água apenas quando necessário</label>
+                                </div>
+                            </div>
+                            <button class="btn" onclick="checkQuiz()" style="margin-top: 1rem;">Verificar Resposta</button>
+                        </div>
+                        <div id="quizResult" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mapeamento de Iniciativas -->
+        <section id="mapping" class="section">
+            <div class="card">
+                <h2>🗺️ Mapeamento de Iniciativas Sustentáveis</h2>
+                <p class="intro-text">
+                    Descubra e cadastre iniciativas sustentáveis na sua comunidade. 
+                    Juntos, podemos criar uma rede forte de ações ambientais!
+                </p>
+
+                <div class="highlight">
+                    <h3>📍 Cadastrar Nova Iniciativa</h3>
+                    <form id="initiativeForm">
+                        <div class="form-group">
+                            <label>Nome da Iniciativa:</label>
+                            <input type="text" id="initName" placeholder="Ex: Horta Comunitária do Bairro" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Categoria:</label>
+                            <select id="initCategory" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option value="agricultura">🌱 Agricultura Urbana</option>
+                                <option value="reciclagem">♻️ Reciclagem</option>
+                                <option value="energia">⚡ Energia Renovável</option>
+                                <option value="educacao">📚 Educação Ambiental</option>
+                                <option value="transporte">🚲 Transporte Sustentável</option>
+                                <option value="outros">🌍 Outros</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descrição:</label>
+                            <input type="text" id="initDescription" placeholder="Descreva brevemente a iniciativa" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Localização:</label>
+                            <input type="text" id="initLocation" placeholder="Endereço ou referência" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Contato:</label>
+                            <input type="text" id="initContact" placeholder="Telefone ou email">
+                        </div>
+
+                        <button type="submit" class="btn">Cadastrar Iniciativa</button>
+                    </form>
+                </div>
+
+                <h3>🌟 Iniciativas Cadastradas</h3>
+                <div class="form-group">
+                    <label>Filtrar por categoria:</label>
+                    <select id="categoryFilter" onchange="filterInitiatives()">
+                        <option value="">Todas as categorias</option>
+                        <option value="agricultura">🌱 Agricultura Urbana</option>
+                        <option value="reciclagem">♻️ Reciclagem</option>
+                        <option value="energia">⚡ Energia Renovável</option>
+                        <option value="educacao">📚 Educação Ambiental</option>
+                        <option value="transporte">🚲 Transporte Sustentável</option>
+                        <option value="outros">🌍 Outros</option>
+                    </select>
+                </div>
+
+                <div id="initiativesList" class="tips-grid">
+                    <!-- Iniciativas serão listadas aqui -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Banco de Ideias -->
+        <section id="ideas" class="section">
+            <div class="card">
+                <h2>💡 Banco de Ideias Sustentáveis</h2>
+                <p class="intro-text">
+                    Compartilhe suas ideias criativas para um dia a dia mais sustentável 
+                    e inspire outras pessoas a adotarem práticas ecológicas!
+                </p>
+
+                <div class="highlight">
+                    <h3>✨ Compartilhar Nova Ideia</h3>
+                    <form id="ideaForm">
+                        <div class="form-group">
+                            <label>Título da Ideia:</label>
+                            <input type="text" id="ideaTitle" placeholder="Ex: Reutilizar garrafas PET como vasos" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Categoria:</label>
+                            <select id="ideaCategory" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option value="casa">🏠 Casa e Jardim</option>
+                                <option value="cozinha">🍳 Cozinha</option>
+                                <option value="trabalho">💼 Trabalho/Escola</option>
+                                <option value="transporte">🚗 Transporte</option>
+                                <option value="diy">🔨 Faça Você Mesmo</option>
+                                <option value="outros">🌟 Outros</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descrição da Ideia:</label>
+                            <input type="text" id="ideaDescription" placeholder="Descreva como implementar sua ideia" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nível de Dificuldade:</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" name="difficulty" value="facil" id="facil" required>
+                                    <label for="facil">😊 Fácil</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="difficulty" value="medio" id="medio">
+                                    <label for="medio">🤔 Médio</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="difficulty" value="dificil" id="dificil">
+                                    <label for="dificil">💪 Difícil</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn">Compartilhar Ideia</button>
+                    </form>
+                </div>
+
+                <h3>🌟 Ideias Compartilhadas</h3>
+                <div class="form-group">
+                    <label>Filtrar por categoria:</label>
+                    <select id="ideaCategoryFilter" onchange="filterIdeas()">
+                        <option value="">Todas as categorias</option>
+                        <option value="casa">🏠 Casa e Jardim</option>
+                        <option value="cozinha">🍳 Cozinha</option>
+                        <option value="trabalho">💼 Trabalho/Escola</option>
+                        <option value="transporte">🚗 Transporte</option>
+                        <option value="diy">🔨 Faça Você Mesmo</option>
+                        <option value="outros">🌟 Outros</option>
+                    </select>
+                </div>
+
+                <div id="ideasList" class="tips-grid">
+                    <!-- Ideias serão listadas aqui -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Dados armazenados localmente
+        let initiatives = [
+            {
+                name: "Horta Comunitária Central",
+                category: "agricultura",
+                description: "Horta urbana com produção de orgânicos para a comunidade",
+                location: "Praça Central, Centro",
+                contact: "(11) 99999-9999"
+            },
+            {
+                name: "Cooperativa de Reciclagem Verde",
+                category: "reciclagem",
+                description: "Coleta seletiva e reciclagem de materiais diversos",
+                location: "Rua das Flores, 123",
+                contact: "reciclaverde@email.com"
+            }
+        ];
+
+        let ideas = [
+            {
+                title: "Reutilizar potes de vidro como organizadores",
+                category: "casa",
+                description: "Use potes de conserva vazios para organizar parafusos, botões e pequenos objetos",
+                difficulty: "facil"
+            },
+            {
+                title: "Composteira caseira com baldes",
+                category: "cozinha",
+                description: "Crie uma composteira usando dois baldes furados para transformar restos orgânicos em adubo",
+                difficulty: "medio"
+            }
+        ];
+
+        // Navegação entre seções
+        function showSection(sectionId) {
+            // Esconder todas as seções
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remover classe active de todos os botões
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Mostrar seção selecionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Adicionar classe active ao botão clicado
+            event.target.classList.add('active');
+        }
+
+        // Calculadora de Pegada de Carbono
+        document.getElementById('carbonForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const energy = parseFloat(document.getElementById('energy').value) || 0;
+            const carKm = parseFloat(document.getElementById('carKm').value) || 0;
+            const flights = parseInt(document.getElementById('flights').value) || 0;
+            const diet = document.querySelector('input[name="diet"]:checked').value;
+            const shopping = document.getElementById('shopping').value;
+            
+            // Cálculos simplificados (fatores de emissão aproximados)
+            let carbonFootprint = 0;
+            
+            // Energia elétrica (Brasil: ~0.07 kg CO2/kWh)
+            carbonFootprint += (energy * 12 * 0.07) / 1000;
+            
+            // Transporte (carro: ~0.2 kg CO2/km)
+            carbonFootprint += (carKm * 12 * 0.2) / 1000;
+            
+            // Voos
+            const flightEmissions = {0: 0, 1: 0.5, 3: 1.5, 6: 3.0};
+            carbonFootprint += flightEmissions[flights] || 0;
+            
+            // Dieta
+            const dietEmissions = {high: 1.5, medium: 1.0, low: 0.5};
+            carbonFootprint += dietEmissions[diet] || 1.0;
+            
+            // Compras
+            const shoppingEmissions = {high: 0.8, medium: 0.5, low: 0.2};
+            carbonFootprint += shoppingEmissions[shopping] || 0.5;
+            
+            // Mostrar resultado
+            document.getElementById('carbonResult').textContent = carbonFootprint.toFixed(1);
+            document.getElementById('results').style.display = 'block';
+            
+            // Gerar dicas personalizadas
+            generateTips(energy, carKm, flights, diet, shopping);
+            
+            // Criar gráfico
+            createCarbonChart(carbonFootprint);
+            
+            // Scroll para o resultado
+            document.getElementById('results').scrollIntoView({behavior: 'smooth'});
+        });
+
+        function generateTips(energy, carKm, flights, diet, shopping) {
+            const tipsContainer = document.getElementById('tipsContainer');
+            let tips = [];
+            
+            if (energy > 200) {
+                tips.push({
+                    title: "⚡ Reduza o Consumo de Energia",
+                    content: "Troque lâmpadas por LED, desligue aparelhos da tomada e use eletrodomésticos eficientes."
+                });
+            }
+            
+            if (carKm > 800) {
+                tips.push({
+                    title: "🚲 Repense seu Transporte",
+                    content: "Use transporte público, bicicleta ou caminhe. Considere carona solidária ou carros elétricos."
+                });
+            }
+            
+            if (flights > 2) {
+                tips.push({
+                    title: "✈️ Compense suas Viagens",
+                    content: "Prefira destinos próximos, voos diretos e considere programas de compensação de carbono."
+                });
+            }
+            
+            if (diet === 'high') {
+                tips.push({
+                    title: "🥗 Mude sua Alimentação",
+                    content: "Reduza o consumo de carne, prefira produtos locais e orgânicos, evite desperdício."
+                });
+            }
+            
+            if (shopping === 'high') {
+                tips.push({
+                    title: "🛍️ Consuma Conscientemente",
+                    content: "Compre apenas o necessário, prefira produtos duráveis e de segunda mão."
+                });
+            }
+            
+            // Dicas gerais sempre incluídas
+            tips.push({
+                title: "🌱 Dicas Gerais",
+                content: "Plante árvores, use produtos reutilizáveis, separe o lixo e eduque outras pessoas."
+            });
+            
+            tipsContainer.innerHTML = tips.map(tip => `
+                <div class="tip-card">
+                    <h4>${tip.title}</h4>
+                    <p>${tip.content}</p>
+                </div>
+            `).join('');
+        }
+
+        function createCarbonChart(userFootprint) {
+            const ctx = document.getElementById('carbonChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Sua Pegada', 'Média Brasileira', 'Média Mundial', 'Meta Sustentável'],
+                    datasets: [{
+                        label: 'Toneladas de CO₂/ano',
+                        data: [userFootprint, 2.3, 4.8, 2.0],
+                        backgroundColor: [
+                            userFootprint > 2.3 ? '#ff6b6b' : '#4caf50',
+                            '#ffd93d',
+                            '#ff9f43',
+                            '#6c5ce7'
+                        ],
+                        borderColor: [
+                            userFootprint > 2.3 ? '#e55656' : '#45a049',
+                            '#f1c40f',
+                            '#e17055',
+                            '#5f3dc4'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Comparação da Pegada de Carbono'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Toneladas CO₂/ano'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Quiz
+        function checkQuiz() {
+            const selected = document.querySelector('input[name="q1"]:checked');
+            const resultDiv = document.getElementById('quizResult');
+            
+            if (!selected) {
+                alert('Por favor, selecione uma resposta!');
+                return;
+            }
+            
+            if (selected.value === 'b' || selected.value === 'c') {
+                resultDiv.innerHTML = `
+                    <div style="background: #d4edda; color: #155724; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <strong>✅ Correto!</strong> Fechar bem as torneiras e usar água conscientemente são práticas essenciais para economizar água.
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div style="background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <strong>❌ Incorreto!</strong> Deixar a torneira pingando desperdiça muita água. O correto é sempre fechar bem as torneiras.
+                    </div>
+                `;
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+
+        // Mapeamento de Iniciativas
+        document.getElementById('initiativeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newInitiative = {
+                name: document.getElementById('initName').value,
+                category: document.getElementById('initCategory').value,
+                description: document.getElementById('initDescription').value,
+                location: document.getElementById('initLocation').value,
+                contact: document.getElementById('initContact').value
+            };
+            
+            initiatives.push(newInitiative);
+            displayInitiatives();
+            this.reset();
+            
+            alert('Iniciativa cadastrada com sucesso! 🎉');
+        });
+
+        function displayInitiatives(filter = '') {
+            const container = document.getElementById('initiativesList');
+            const filteredInitiatives = filter ? 
+                initiatives.filter(init => init.category === filter) : 
+                initiatives;
+            
+            if (filteredInitiatives.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">Nenhuma iniciativa encontrada.</p>';
+                return;
+            }
+            
+            container.innerHTML = filteredInitiatives.map(init => `
+                <div class="tip-card">
+                    <h4>${getCategoryIcon(init.category)} ${init.name}</h4>
+                    <p><strong>Descrição:</strong> ${init.description}</p>
+                    <p><strong>📍 Local:</strong> ${init.location}</p>
+                    ${init.contact ? `<p><strong>📞 Contato:</strong> ${init.contact}</p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function filterInitiatives() {
+            const filter = document.getElementById('categoryFilter').value;
+            displayInitiatives(filter);
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                agricultura: '🌱',
+                reciclagem: '♻️',
+                energia: '⚡',
+                educacao: '📚',
+                transporte: '🚲',
+                outros: '🌍'
+            };
+            return icons[category] || '🌍';
+        }
+
+        // Banco de Ideias
+        document.getElementById('ideaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newIdea = {
+                title: document.getElementById('ideaTitle').value,
+                category: document.getElementById('ideaCategory').value,
+                description: document.getElementById('ideaDescription').value,
+                difficulty: document.querySelector('input[name="difficulty"]:checked').value
+            };
+            
+            ideas.push(newIdea);
+            displayIdeas();
+            this.reset();
+            
+            alert('Ideia compartilhada com sucesso! 💡');
+        });
+
+        function displayIdeas(filter = '') {
+            const container = document.getElementById('ideasList');
+            const filteredIdeas = filter ? 
+                ideas.filter(idea => idea.category === filter) : 
+                ideas;
+            
+            if (filteredIdeas.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">Nenhuma ideia encontrada.</p>';
+                return;
+            }
+            
+            container.innerHTML = filteredIdeas.map(idea => `
+                <div class="tip-card">
+                    <h4>${getIdeaCategoryIcon(idea.category)} ${idea.title}</h4>
+                    <p>${idea.description}</p>
+                    <p><strong>Dificuldade:</strong> ${getDifficultyLabel(idea.difficulty)}</p>
+                </div>
+            `).join('');
+        }
+
+        function filterIdeas() {
+            const filter = document.getElementById('ideaCategoryFilter').value;
+            displayIdeas(filter);
+        }
+
+        function getIdeaCategoryIcon(category) {
+            const icons = {
+                casa: '🏠',
+                cozinha: '🍳',
+                trabalho: '💼',
+                transporte: '🚗',
+                diy: '🔨',
+                outros: '🌟'
+            };
+            return icons[category] || '🌟';
+        }
+
+        function getDifficultyLabel(difficulty) {
+            const labels = {
+                facil: '😊 Fácil',
+                medio: '🤔 Médio',
+                dificil: '💪 Difícil'
+            };
+            return labels[difficulty] || '😊 Fácil';
+        }
+
+        // Inicializar displays
+        displayInitiatives();
+        displayIdeas();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97a5bc7542505446',t:'MTc1NzA3NTQwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

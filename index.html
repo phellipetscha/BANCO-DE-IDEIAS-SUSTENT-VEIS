@@ -216,6 +216,32 @@
             margin: 2rem 0;
         }
 
+        .rating-display {
+            font-size: 0.9rem;
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .rating-buttons button:hover {
+            transform: scale(1.2);
+            filter: brightness(1.2);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -549,36 +575,51 @@
         <!-- Banco de Ideias -->
         <section id="ideas" class="section">
             <div class="card">
-                <h2>💡 Banco de Ideias Sustentáveis</h2>
+                <h2>💡 Banco de Ideias Sustentáveis para o Dia a Dia</h2>
                 <p class="intro-text">
-                    Compartilhe suas ideias criativas para um dia a dia mais sustentável 
-                    e inspire outras pessoas a adotarem práticas ecológicas!
+                    Pequenas mudanças em nossos hábitos diários podem ter um grande impacto no meio ambiente 
+                    e na qualidade de vida. Compartilhe suas ideias criativas e inspire outras pessoas a 
+                    adotarem práticas sustentáveis em todas as áreas da vida!
                 </p>
+
+                <div class="highlight">
+                    <h3>🎯 Por que Pequenas Mudanças Importam?</h3>
+                    <p>Cada gesto sustentável contribui para:</p>
+                    <ul style="margin: 1rem 0; padding-left: 2rem;">
+                        <li>Redução da pegada de carbono individual</li>
+                        <li>Economia de recursos naturais</li>
+                        <li>Diminuição da produção de resíduos</li>
+                        <li>Melhoria da qualidade de vida</li>
+                        <li>Inspiração para outras pessoas</li>
+                    </ul>
+                </div>
 
                 <div class="highlight">
                     <h3>✨ Compartilhar Nova Ideia</h3>
                     <form id="ideaForm">
                         <div class="form-group">
                             <label>Título da Ideia:</label>
-                            <input type="text" id="ideaTitle" placeholder="Ex: Reutilizar garrafas PET como vasos" required>
+                            <input type="text" id="ideaTitle" placeholder="Ex: Detergente caseiro com limão e bicarbonato" required>
                         </div>
 
                         <div class="form-group">
                             <label>Categoria:</label>
                             <select id="ideaCategory" required>
                                 <option value="">Selecione uma categoria</option>
+                                <option value="alimentacao">🥗 Alimentação</option>
+                                <option value="transporte">🚲 Transporte</option>
+                                <option value="energia">⚡ Energia</option>
+                                <option value="residuos">♻️ Resíduos</option>
+                                <option value="limpeza">🧽 Limpeza</option>
+                                <option value="compras">🛒 Compras</option>
                                 <option value="casa">🏠 Casa e Jardim</option>
-                                <option value="cozinha">🍳 Cozinha</option>
-                                <option value="trabalho">💼 Trabalho/Escola</option>
-                                <option value="transporte">🚗 Transporte</option>
-                                <option value="diy">🔨 Faça Você Mesmo</option>
                                 <option value="outros">🌟 Outros</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label>Descrição da Ideia:</label>
-                            <input type="text" id="ideaDescription" placeholder="Descreva como implementar sua ideia" required>
+                            <label>Descrição Detalhada:</label>
+                            <textarea id="ideaDescription" rows="4" placeholder="Descreva passo a passo como implementar sua ideia, incluindo materiais necessários e benefícios" required style="resize: vertical;"></textarea>
                         </div>
 
                         <div class="form-group">
@@ -599,26 +640,55 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label>Seu Nome (opcional):</label>
+                            <input type="text" id="ideaAuthor" placeholder="Como você gostaria de ser creditado?">
+                        </div>
+
                         <button type="submit" class="btn">Compartilhar Ideia</button>
                     </form>
                 </div>
 
-                <h3>🌟 Ideias Compartilhadas</h3>
+                <h3>🌟 Ideias Compartilhadas pela Comunidade</h3>
                 <div class="form-group">
                     <label>Filtrar por categoria:</label>
                     <select id="ideaCategoryFilter" onchange="filterIdeas()">
                         <option value="">Todas as categorias</option>
+                        <option value="alimentacao">🥗 Alimentação</option>
+                        <option value="transporte">🚲 Transporte</option>
+                        <option value="energia">⚡ Energia</option>
+                        <option value="residuos">♻️ Resíduos</option>
+                        <option value="limpeza">🧽 Limpeza</option>
+                        <option value="compras">🛒 Compras</option>
                         <option value="casa">🏠 Casa e Jardim</option>
-                        <option value="cozinha">🍳 Cozinha</option>
-                        <option value="trabalho">💼 Trabalho/Escola</option>
-                        <option value="transporte">🚗 Transporte</option>
-                        <option value="diy">🔨 Faça Você Mesmo</option>
                         <option value="outros">🌟 Outros</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Ordenar por:</label>
+                    <select id="ideaSortFilter" onchange="sortIdeas()">
+                        <option value="newest">Mais recentes</option>
+                        <option value="rating">Melhor avaliadas</option>
+                        <option value="category">Categoria</option>
                     </select>
                 </div>
 
                 <div id="ideasList" class="tips-grid">
                     <!-- Ideias serão listadas aqui -->
+                </div>
+
+                <div class="highlight" style="margin-top: 3rem;">
+                    <h3>🤝 Vamos Construir Juntos um Futuro Sustentável!</h3>
+                    <p>
+                        Cada ideia compartilhada aqui representa um passo em direção a um mundo mais sustentável. 
+                        Experimente as sugestões, adapte-as à sua realidade e não se esqueça de compartilhar 
+                        suas próprias descobertas. Juntos, podemos transformar pequenos gestos em grandes mudanças!
+                    </p>
+                    <p style="margin-top: 1rem;">
+                        <strong>💡 Dica:</strong> Avalie as ideias que você testou para ajudar outros usuários 
+                        a encontrarem as melhores práticas sustentáveis!
+                    </p>
                 </div>
             </div>
         </section>
@@ -645,16 +715,84 @@
 
         let ideas = [
             {
-                title: "Reutilizar potes de vidro como organizadores",
-                category: "casa",
-                description: "Use potes de conserva vazios para organizar parafusos, botões e pequenos objetos",
-                difficulty: "facil"
+                title: "Smoothie de cascas de frutas",
+                category: "alimentacao",
+                description: "Aproveite cascas de maçã, pêra e outras frutas para fazer smoothies nutritivos. Lave bem as cascas, bata no liquidificador com água e mel. Rico em fibras e vitaminas!",
+                difficulty: "facil",
+                author: "Ana Silva",
+                rating: 4.8,
+                votes: 24,
+                date: new Date('2024-01-15')
             },
             {
-                title: "Composteira caseira com baldes",
-                category: "cozinha",
-                description: "Crie uma composteira usando dois baldes furados para transformar restos orgânicos em adubo",
-                difficulty: "medio"
+                title: "Carona solidária no trabalho",
+                category: "transporte",
+                description: "Organize um grupo de WhatsApp com colegas de trabalho para compartilhar caronas. Divida os custos de combustível e reduza o trânsito. Uma pessoa pode dirigir por semana.",
+                difficulty: "facil",
+                author: "Carlos Santos",
+                rating: 4.5,
+                votes: 18,
+                date: new Date('2024-01-20')
+            },
+            {
+                title: "Detergente caseiro de limão",
+                category: "limpeza",
+                description: "Misture cascas de 3 limões, 500ml de água, 200ml de vinagre branco e 3 colheres de bicarbonato. Deixe descansar por 15 dias. Coe e use para limpeza geral. Econômico e ecológico!",
+                difficulty: "medio",
+                author: "Maria Oliveira",
+                rating: 4.9,
+                votes: 32,
+                date: new Date('2024-01-10')
+            },
+            {
+                title: "Timer para banho de 5 minutos",
+                category: "energia",
+                description: "Use o timer do celular para limitar o banho a 5 minutos. Desligue o chuveiro ao se ensaboar. Pode economizar até 40% da água e energia do banho.",
+                difficulty: "facil",
+                author: "João Costa",
+                rating: 4.2,
+                votes: 15,
+                date: new Date('2024-01-25')
+            },
+            {
+                title: "Sacolas reutilizáveis de camisetas velhas",
+                category: "residuos",
+                description: "Transforme camisetas velhas em sacolas ecológicas. Corte as mangas e o decote, amarre a barra inferior. Perfeitas para compras e muito resistentes!",
+                difficulty: "facil",
+                author: "Lucia Ferreira",
+                rating: 4.6,
+                votes: 21,
+                date: new Date('2024-01-18')
+            },
+            {
+                title: "Lista de compras por categoria",
+                category: "compras",
+                description: "Organize sua lista de compras por seções do mercado (hortifrúti, laticínios, etc.). Evita voltar às mesmas seções e reduz o tempo de compra, diminuindo o consumo por impulso.",
+                difficulty: "facil",
+                author: "Pedro Lima",
+                rating: 4.3,
+                votes: 12,
+                date: new Date('2024-01-22')
+            },
+            {
+                title: "Horta vertical com garrafas PET",
+                category: "casa",
+                description: "Corte garrafas PET ao meio, faça furos para drenagem, preencha com terra e plante temperos. Pendure na parede ou varanda. Ideal para apartamentos pequenos.",
+                difficulty: "medio",
+                author: "Fernanda Rocha",
+                rating: 4.7,
+                votes: 28,
+                date: new Date('2024-01-12')
+            },
+            {
+                title: "Receita de hambúrguer de lentilha",
+                category: "alimentacao",
+                description: "Cozinhe 1 xícara de lentilha, amasse com alho, cebola, aveia e temperos. Forme hambúrgueres e asse por 20min. Rico em proteínas vegetais e muito saboroso!",
+                difficulty: "medio",
+                author: "Roberto Alves",
+                rating: 4.4,
+                votes: 19,
+                date: new Date('2024-01-16')
             }
         ];
 
@@ -913,48 +1051,159 @@
                 title: document.getElementById('ideaTitle').value,
                 category: document.getElementById('ideaCategory').value,
                 description: document.getElementById('ideaDescription').value,
-                difficulty: document.querySelector('input[name="difficulty"]:checked').value
+                difficulty: document.querySelector('input[name="difficulty"]:checked').value,
+                author: document.getElementById('ideaAuthor').value || 'Anônimo',
+                rating: 0,
+                votes: 0,
+                date: new Date()
             };
             
-            ideas.push(newIdea);
+            ideas.unshift(newIdea); // Adiciona no início para mostrar as mais recentes primeiro
             displayIdeas();
             this.reset();
             
-            alert('Ideia compartilhada com sucesso! 💡');
+            alert('Ideia compartilhada com sucesso! 💡 Obrigado por contribuir para nossa comunidade sustentável!');
         });
 
-        function displayIdeas(filter = '') {
+        function displayIdeas(filter = '', sort = 'newest') {
             const container = document.getElementById('ideasList');
-            const filteredIdeas = filter ? 
+            let filteredIdeas = filter ? 
                 ideas.filter(idea => idea.category === filter) : 
-                ideas;
+                [...ideas];
+            
+            // Ordenação
+            switch(sort) {
+                case 'rating':
+                    filteredIdeas.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+                    break;
+                case 'category':
+                    filteredIdeas.sort((a, b) => a.category.localeCompare(b.category));
+                    break;
+                case 'newest':
+                default:
+                    filteredIdeas.sort((a, b) => (b.date || new Date()) - (a.date || new Date()));
+                    break;
+            }
             
             if (filteredIdeas.length === 0) {
                 container.innerHTML = '<p style="text-align: center; color: #666;">Nenhuma ideia encontrada.</p>';
                 return;
             }
             
-            container.innerHTML = filteredIdeas.map(idea => `
-                <div class="tip-card">
+            container.innerHTML = filteredIdeas.map((idea, index) => `
+                <div class="tip-card" style="position: relative;">
                     <h4>${getIdeaCategoryIcon(idea.category)} ${idea.title}</h4>
-                    <p>${idea.description}</p>
-                    <p><strong>Dificuldade:</strong> ${getDifficultyLabel(idea.difficulty)}</p>
+                    <p style="margin: 1rem 0;">${idea.description}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                        <div>
+                            <span style="font-size: 0.9rem; color: #666;"><strong>Dificuldade:</strong> ${getDifficultyLabel(idea.difficulty)}</span>
+                            ${idea.author ? `<br><span style="font-size: 0.8rem; color: #888;">Por: ${idea.author}</span>` : ''}
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div class="rating-display">
+                                ${generateStars(idea.rating || 0)}
+                                <span style="font-size: 0.8rem; color: #666;">(${idea.votes || 0})</span>
+                            </div>
+                            <div class="rating-buttons" style="display: flex; gap: 0.25rem;">
+                                ${[1,2,3,4,5].map(star => `
+                                    <button onclick="rateIdea(${index}, ${star})" 
+                                            style="background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 2px;"
+                                            title="Avaliar com ${star} estrela${star > 1 ? 's' : ''}">⭐</button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `).join('');
         }
 
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            
+            return '★'.repeat(fullStars) + 
+                   (hasHalfStar ? '☆' : '') + 
+                   '☆'.repeat(emptyStars) + 
+                   ` ${rating.toFixed(1)}`;
+        }
+
+        function rateIdea(index, rating) {
+            const currentFilter = document.getElementById('ideaCategoryFilter').value;
+            const currentSort = document.getElementById('ideaSortFilter').value;
+            
+            // Encontrar a ideia original no array não filtrado
+            let filteredIdeas = currentFilter ? 
+                ideas.filter(idea => idea.category === currentFilter) : 
+                [...ideas];
+                
+            // Aplicar ordenação para encontrar o índice correto
+            switch(currentSort) {
+                case 'rating':
+                    filteredIdeas.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+                    break;
+                case 'category':
+                    filteredIdeas.sort((a, b) => a.category.localeCompare(b.category));
+                    break;
+                case 'newest':
+                default:
+                    filteredIdeas.sort((a, b) => (b.date || new Date()) - (a.date || new Date()));
+                    break;
+            }
+            
+            const ideaToRate = filteredIdeas[index];
+            const originalIndex = ideas.findIndex(idea => 
+                idea.title === ideaToRate.title && 
+                idea.author === ideaToRate.author && 
+                idea.date === ideaToRate.date
+            );
+            
+            if (originalIndex !== -1) {
+                const currentRating = ideas[originalIndex].rating || 0;
+                const currentVotes = ideas[originalIndex].votes || 0;
+                
+                // Calcular nova média
+                const newVotes = currentVotes + 1;
+                const newRating = ((currentRating * currentVotes) + rating) / newVotes;
+                
+                ideas[originalIndex].rating = newRating;
+                ideas[originalIndex].votes = newVotes;
+                
+                displayIdeas(currentFilter, currentSort);
+                
+                // Feedback visual
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = '✅';
+                button.style.color = '#4caf50';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.color = '';
+                }, 1000);
+            }
+        }
+
         function filterIdeas() {
             const filter = document.getElementById('ideaCategoryFilter').value;
-            displayIdeas(filter);
+            const sort = document.getElementById('ideaSortFilter').value;
+            displayIdeas(filter, sort);
+        }
+
+        function sortIdeas() {
+            const filter = document.getElementById('ideaCategoryFilter').value;
+            const sort = document.getElementById('ideaSortFilter').value;
+            displayIdeas(filter, sort);
         }
 
         function getIdeaCategoryIcon(category) {
             const icons = {
+                alimentacao: '🥗',
+                transporte: '🚲',
+                energia: '⚡',
+                residuos: '♻️',
+                limpeza: '🧽',
+                compras: '🛒',
                 casa: '🏠',
-                cozinha: '🍳',
-                trabalho: '💼',
-                transporte: '🚗',
-                diy: '🔨',
                 outros: '🌟'
             };
             return icons[category] || '🌟';
@@ -973,5 +1222,5 @@
         displayInitiatives();
         displayIdeas();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97a5bc7542505446',t:'MTc1NzA3NTQwOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97a5c3f804b65446',t:'MTc1NzA3NTcxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

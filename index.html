@@ -514,6 +514,15 @@
 
                 <div class="highlight">
                     <h3>📍 Cadastrar Nova Iniciativa</h3>
+                    <div style="background: #e8f5e8; border: 2px solid #4caf50; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;">
+                        <h4 style="color: #2e7d32; margin-bottom: 0.5rem;">🛡️ Diretrizes da Plataforma</h4>
+                        <ul style="margin: 0; padding-left: 1.5rem; color: #2e7d32;">
+                            <li>🚫 <strong>Proibido:</strong> Palavras ofensivas, baixo calão ou conteúdo inadequado</li>
+                            <li>✅ Use linguagem respeitosa e profissional</li>
+                            <li>🌍 Compartilhe apenas iniciativas reais e sustentáveis</li>
+                            <li>📝 Forneça informações claras e úteis</li>
+                        </ul>
+                    </div>
                     <form id="initiativeForm">
                         <div class="form-group">
                             <label>Nome da Iniciativa:</label>
@@ -596,6 +605,16 @@
 
                 <div class="highlight">
                     <h3>✨ Compartilhar Nova Ideia</h3>
+                    <div style="background: #e3f2fd; border: 2px solid #2196f3; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;">
+                        <h4 style="color: #1976d2; margin-bottom: 0.5rem;">📋 Regras da Comunidade</h4>
+                        <ul style="margin: 0; padding-left: 1.5rem; color: #1565c0;">
+                            <li>🚫 <strong>Não são permitidas</strong> palavras de baixo calão, ofensas ou linguagem inadequada</li>
+                            <li>✅ Mantenha um ambiente respeitoso e construtivo</li>
+                            <li>🌱 Foque em ideias sustentáveis e positivas</li>
+                            <li>📝 Descrições devem ter pelo menos 10 caracteres</li>
+                        </ul>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #1565c0;"><strong>💡 Lembre-se:</strong> Esta é uma plataforma educativa dedicada à sustentabilidade!</p>
+                    </div>
                     <form id="ideaForm">
                         <div class="form-group">
                             <label>Título da Ideia:</label>
@@ -695,6 +714,83 @@
     </main>
 
     <script>
+        // Sistema de moderação e controle
+        const bannedWords = [
+            'idiota', 'burro', 'estupido', 'imbecil', 'otario', 'babaca', 'merda', 'porra', 'caralho', 'puta', 'viado', 'gay', 'negro', 'preto', 'gordo', 'feio', 'lixo', 'nojento', 'ridiculo', 'patético', 'inutil', 'fracassado', 'loser', 'stupid', 'idiot', 'fuck', 'shit', 'damn', 'bitch', 'asshole', 'crap', 'suck', 'hate', 'kill', 'die', 'death', 'murder', 'violence', 'drug', 'sex', 'porn', 'nude', 'naked'
+        ];
+
+        // Controle de avaliações por usuário (simulado com localStorage)
+        let userRatings = JSON.parse(localStorage.getItem('userRatings') || '{}');
+
+        function moderateContent(text) {
+            const lowerText = text.toLowerCase();
+            
+            // Verificar palavras banidas
+            for (let word of bannedWords) {
+                if (lowerText.includes(word.toLowerCase())) {
+                    return {
+                        isValid: false,
+                        message: `⚠️ Conteúdo inadequado detectado. Por favor, mantenha um ambiente respeitoso e construtivo. Nossa plataforma é dedicada à sustentabilidade e bem-estar da comunidade.`
+                    };
+                }
+            }
+            
+            // Verificar se não é muito curto (spam)
+            if (text.trim().length < 10) {
+                return {
+                    isValid: false,
+                    message: `⚠️ Por favor, forneça uma descrição mais detalhada (mínimo 10 caracteres).`
+                };
+            }
+            
+            // Verificar se não é muito longo
+            if (text.length > 1000) {
+                return {
+                    isValid: false,
+                    message: `⚠️ Descrição muito longa. Por favor, mantenha até 1000 caracteres.`
+                };
+            }
+            
+            // Verificar caracteres repetidos (spam)
+            if (/(.)\1{10,}/.test(text)) {
+                return {
+                    isValid: false,
+                    message: `⚠️ Evite repetir caracteres excessivamente.`
+                };
+            }
+            
+            return { isValid: true };
+        }
+
+        function canUserRate(ideaId) {
+            const userId = getUserId();
+            const userKey = `${userId}_${ideaId}`;
+            
+            return !userRatings[userKey];
+        }
+
+        function recordUserRating(ideaId) {
+            const userId = getUserId();
+            const userKey = `${userId}_${ideaId}`;
+            
+            userRatings[userKey] = {
+                timestamp: Date.now(),
+                rated: true
+            };
+            
+            localStorage.setItem('userRatings', JSON.stringify(userRatings));
+        }
+
+        function getUserId() {
+            // Simula um ID único do usuário baseado no navegador
+            let userId = localStorage.getItem('userId');
+            if (!userId) {
+                userId = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+                localStorage.setItem('userId', userId);
+            }
+            return userId;
+        }
+
         // Dados armazenados localmente
         let initiatives = [
             {
@@ -722,7 +818,8 @@
                 author: "Ana Silva",
                 rating: 4.8,
                 votes: 24,
-                date: new Date('2024-01-15')
+                date: new Date('2024-01-15'),
+                id: 'idea_1_smoothie_cascas'
             },
             {
                 title: "Carona solidária no trabalho",
@@ -732,7 +829,8 @@
                 author: "Carlos Santos",
                 rating: 4.5,
                 votes: 18,
-                date: new Date('2024-01-20')
+                date: new Date('2024-01-20'),
+                id: 'idea_2_carona_trabalho'
             },
             {
                 title: "Detergente caseiro de limão",
@@ -742,7 +840,8 @@
                 author: "Maria Oliveira",
                 rating: 4.9,
                 votes: 32,
-                date: new Date('2024-01-10')
+                date: new Date('2024-01-10'),
+                id: 'idea_3_detergente_limao'
             },
             {
                 title: "Timer para banho de 5 minutos",
@@ -752,7 +851,8 @@
                 author: "João Costa",
                 rating: 4.2,
                 votes: 15,
-                date: new Date('2024-01-25')
+                date: new Date('2024-01-25'),
+                id: 'idea_4_timer_banho'
             },
             {
                 title: "Sacolas reutilizáveis de camisetas velhas",
@@ -762,7 +862,8 @@
                 author: "Lucia Ferreira",
                 rating: 4.6,
                 votes: 21,
-                date: new Date('2024-01-18')
+                date: new Date('2024-01-18'),
+                id: 'idea_5_sacolas_camisetas'
             },
             {
                 title: "Lista de compras por categoria",
@@ -772,7 +873,8 @@
                 author: "Pedro Lima",
                 rating: 4.3,
                 votes: 12,
-                date: new Date('2024-01-22')
+                date: new Date('2024-01-22'),
+                id: 'idea_6_lista_compras'
             },
             {
                 title: "Horta vertical com garrafas PET",
@@ -782,7 +884,8 @@
                 author: "Fernanda Rocha",
                 rating: 4.7,
                 votes: 28,
-                date: new Date('2024-01-12')
+                date: new Date('2024-01-12'),
+                id: 'idea_7_horta_vertical'
             },
             {
                 title: "Receita de hambúrguer de lentilha",
@@ -792,7 +895,8 @@
                 author: "Roberto Alves",
                 rating: 4.4,
                 votes: 19,
-                date: new Date('2024-01-16')
+                date: new Date('2024-01-16'),
+                id: 'idea_8_hamburguer_lentilha'
             }
         ];
 
@@ -990,11 +1094,34 @@
         document.getElementById('initiativeForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const name = document.getElementById('initName').value;
+            const description = document.getElementById('initDescription').value;
+            const location = document.getElementById('initLocation').value;
+            
+            // Moderar conteúdo
+            const nameCheck = moderateContent(name);
+            if (!nameCheck.isValid) {
+                alert(nameCheck.message);
+                return;
+            }
+            
+            const descCheck = moderateContent(description);
+            if (!descCheck.isValid) {
+                alert(descCheck.message);
+                return;
+            }
+            
+            const locCheck = moderateContent(location);
+            if (!locCheck.isValid) {
+                alert(locCheck.message);
+                return;
+            }
+            
             const newInitiative = {
-                name: document.getElementById('initName').value,
+                name: name,
                 category: document.getElementById('initCategory').value,
-                description: document.getElementById('initDescription').value,
-                location: document.getElementById('initLocation').value,
+                description: description,
+                location: location,
                 contact: document.getElementById('initContact').value
             };
             
@@ -1047,15 +1174,39 @@
         document.getElementById('ideaForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const title = document.getElementById('ideaTitle').value;
+            const description = document.getElementById('ideaDescription').value;
+            const author = document.getElementById('ideaAuthor').value || 'Anônimo';
+            
+            // Moderar conteúdo
+            const titleCheck = moderateContent(title);
+            if (!titleCheck.isValid) {
+                alert(titleCheck.message);
+                return;
+            }
+            
+            const descCheck = moderateContent(description);
+            if (!descCheck.isValid) {
+                alert(descCheck.message);
+                return;
+            }
+            
+            const authorCheck = moderateContent(author);
+            if (!authorCheck.isValid) {
+                alert('⚠️ Nome do autor contém conteúdo inadequado. Por favor, use um nome respeitoso.');
+                return;
+            }
+            
             const newIdea = {
-                title: document.getElementById('ideaTitle').value,
+                title: title,
                 category: document.getElementById('ideaCategory').value,
-                description: document.getElementById('ideaDescription').value,
+                description: description,
                 difficulty: document.querySelector('input[name="difficulty"]:checked').value,
-                author: document.getElementById('ideaAuthor').value || 'Anônimo',
+                author: author,
                 rating: 0,
                 votes: 0,
-                date: new Date()
+                date: new Date(),
+                id: Date.now() + '_' + Math.random().toString(36).substr(2, 9) // ID único para controle de avaliações
             };
             
             ideas.unshift(newIdea); // Adiciona no início para mostrar as mais recentes primeiro
@@ -1105,11 +1256,14 @@
                                 <span style="font-size: 0.8rem; color: #666;">(${idea.votes || 0})</span>
                             </div>
                             <div class="rating-buttons" style="display: flex; gap: 0.25rem;">
-                                ${[1,2,3,4,5].map(star => `
-                                    <button onclick="rateIdea(${index}, ${star})" 
-                                            style="background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 2px;"
-                                            title="Avaliar com ${star} estrela${star > 1 ? 's' : ''}">⭐</button>
-                                `).join('')}
+                                ${canUserRate(idea.id || `${idea.title}_${idea.author}`) ? 
+                                    [1,2,3,4,5].map(star => `
+                                        <button onclick="rateIdea(${index}, ${star})" 
+                                                style="background: none; border: none; font-size: 1.2rem; cursor: pointer; padding: 2px;"
+                                                title="Avaliar com ${star} estrela${star > 1 ? 's' : ''}">⭐</button>
+                                    `).join('') :
+                                    '<span style="font-size: 0.8rem; color: #888; font-style: italic;">Já avaliado</span>'
+                                }
                             </div>
                         </div>
                     </div>
@@ -1152,10 +1306,19 @@
             }
             
             const ideaToRate = filteredIdeas[index];
+            const ideaId = ideaToRate.id || `${ideaToRate.title}_${ideaToRate.author}`;
+            
+            // Verificar se o usuário já avaliou esta ideia
+            if (!canUserRate(ideaId)) {
+                alert('⚠️ Você já avaliou esta ideia! Cada usuário pode avaliar apenas uma vez para manter a justiça do sistema.');
+                return;
+            }
+            
             const originalIndex = ideas.findIndex(idea => 
-                idea.title === ideaToRate.title && 
-                idea.author === ideaToRate.author && 
-                idea.date === ideaToRate.date
+                (idea.id && idea.id === ideaToRate.id) ||
+                (idea.title === ideaToRate.title && 
+                 idea.author === ideaToRate.author && 
+                 idea.date === ideaToRate.date)
             );
             
             if (originalIndex !== -1) {
@@ -1169,6 +1332,9 @@
                 ideas[originalIndex].rating = newRating;
                 ideas[originalIndex].votes = newVotes;
                 
+                // Registrar que o usuário avaliou esta ideia
+                recordUserRating(ideaId);
+                
                 displayIdeas(currentFilter, currentSort);
                 
                 // Feedback visual
@@ -1177,9 +1343,10 @@
                 button.textContent = '✅';
                 button.style.color = '#4caf50';
                 setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.color = '';
+                    displayIdeas(currentFilter, currentSort); // Atualizar para mostrar "Já avaliado"
                 }, 1000);
+                
+                alert(`✨ Obrigado pela sua avaliação de ${rating} estrela${rating > 1 ? 's' : ''}! Sua opinião ajuda nossa comunidade a encontrar as melhores ideias sustentáveis.`);
             }
         }
 
@@ -1222,5 +1389,5 @@
         displayInitiatives();
         displayIdeas();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97a5c3f804b65446',t:'MTc1NzA3NTcxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'988c5c979418c20f',t:'MTc1OTQ5MzY5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

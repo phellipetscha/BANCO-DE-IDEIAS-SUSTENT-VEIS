@@ -20,6 +20,37 @@
             color: #333;
             line-height: 1.6;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            animation: floatingLights 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.03), transparent, rgba(255,255,255,0.02), transparent);
+            animation: backgroundSpin 30s linear infinite;
+            pointer-events: none;
+            z-index: 1;
         }
 
         @keyframes gradientShift {
@@ -28,10 +59,32 @@
             100% { background-position: 0% 50%; }
         }
 
+        @keyframes floatingLights {
+            0%, 100% { 
+                transform: translateY(0px) scale(1);
+                opacity: 0.6;
+            }
+            33% { 
+                transform: translateY(-20px) scale(1.1);
+                opacity: 0.8;
+            }
+            66% { 
+                transform: translateY(10px) scale(0.9);
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes backgroundSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 2;
         }
 
         header {
@@ -103,18 +156,27 @@
         }
 
         .nav-btn {
-            background: linear-gradient(45deg, #4caf50, #66bb6a);
+            background: linear-gradient(45deg, #2e7d32 0%, #4caf50 25%, #66bb6a 50%, #81c784 75%, #4caf50 100%);
+            background-size: 300% 300%;
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 30px;
+            padding: 18px 36px;
+            border-radius: 35px;
             cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            box-shadow: 
+                0 8px 25px rgba(76, 175, 80, 0.4),
+                0 4px 15px rgba(46, 125, 50, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                inset 0 -1px 0 rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
+            transform: perspective(1000px) rotateX(5deg);
+            animation: btnBackgroundShift 3s ease infinite;
         }
 
         .nav-btn::before {
@@ -133,15 +195,57 @@
         }
 
         .nav-btn:hover {
-            background: linear-gradient(45deg, #45a049, #5cb85c);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.6);
+            background: linear-gradient(45deg, #1a5e20 0%, #2e7d32 20%, #4caf50 40%, #66bb6a 60%, #81c784 80%, #66bb6a 100%);
+            background-size: 400% 400%;
+            transform: perspective(1000px) rotateX(10deg) translateY(-8px) scale(1.1);
+            box-shadow: 
+                0 15px 40px rgba(76, 175, 80, 0.7),
+                0 8px 25px rgba(46, 125, 50, 0.5),
+                0 0 30px rgba(129, 199, 132, 0.6),
+                inset 0 2px 0 rgba(255,255,255,0.3),
+                inset 0 -2px 0 rgba(0,0,0,0.2);
+            animation: btnHoverGlow 1.5s ease infinite alternate, btnBackgroundShift 2s ease infinite;
         }
 
         .nav-btn.active {
-            background: linear-gradient(45deg, #2e7d32, #388e3c);
-            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.5);
-            transform: translateY(-2px);
+            background: linear-gradient(45deg, #1a5e20 0%, #2e7d32 30%, #388e3c 60%, #4caf50 100%);
+            background-size: 200% 200%;
+            box-shadow: 
+                0 10px 30px rgba(46, 125, 50, 0.6),
+                0 5px 15px rgba(26, 94, 32, 0.4),
+                0 0 25px rgba(76, 175, 80, 0.5),
+                inset 0 2px 0 rgba(255,255,255,0.25),
+                inset 0 -2px 0 rgba(0,0,0,0.15);
+            transform: perspective(1000px) rotateX(8deg) translateY(-5px) scale(1.05);
+            animation: btnActiveGlow 2s ease infinite alternate, btnBackgroundShift 2.5s ease infinite;
+        }
+
+        @keyframes btnBackgroundShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes btnHoverGlow {
+            0% { 
+                filter: brightness(1) saturate(1);
+                text-shadow: 0 0 10px rgba(255,255,255,0.8);
+            }
+            100% { 
+                filter: brightness(1.2) saturate(1.3);
+                text-shadow: 0 0 20px rgba(255,255,255,1), 0 0 30px rgba(129,199,132,0.8);
+            }
+        }
+
+        @keyframes btnActiveGlow {
+            0% { 
+                filter: brightness(1.1) saturate(1.2);
+                text-shadow: 0 0 15px rgba(255,255,255,0.9);
+            }
+            100% { 
+                filter: brightness(1.3) saturate(1.4);
+                text-shadow: 0 0 25px rgba(255,255,255,1.1), 0 0 35px rgba(76,175,80,0.9);
+            }
         }
 
         .section {
@@ -331,63 +435,114 @@
 
         .particle {
             position: absolute;
-            width: 6px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.6);
             border-radius: 50%;
-            animation: float 15s infinite linear;
+            animation: megaFloat 15s infinite linear;
+            filter: blur(0.5px);
         }
 
         .particle:nth-child(1) {
             left: 10%;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(76,175,80,0.6) 50%, transparent 100%);
             animation-delay: 0s;
             animation-duration: 12s;
+            box-shadow: 0 0 15px rgba(255,255,255,0.8);
         }
 
         .particle:nth-child(2) {
             left: 20%;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(129,199,132,0.7) 40%, transparent 100%);
             animation-delay: 2s;
             animation-duration: 15s;
+            box-shadow: 0 0 20px rgba(129,199,132,0.6);
         }
 
         .particle:nth-child(3) {
             left: 40%;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(165,214,167,0.8) 30%, transparent 100%);
             animation-delay: 4s;
             animation-duration: 10s;
+            box-shadow: 0 0 12px rgba(165,214,167,0.7);
         }
 
         .particle:nth-child(4) {
             left: 60%;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(76,175,80,0.5) 60%, transparent 100%);
             animation-delay: 6s;
             animation-duration: 18s;
+            box-shadow: 0 0 18px rgba(76,175,80,0.5);
         }
 
         .particle:nth-child(5) {
             left: 80%;
+            width: 14px;
+            height: 14px;
+            background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(200,230,201,0.8) 45%, transparent 100%);
             animation-delay: 8s;
             animation-duration: 14s;
+            box-shadow: 0 0 25px rgba(200,230,201,0.6);
         }
 
         .particle:nth-child(6) {
             left: 90%;
+            width: 7px;
+            height: 7px;
+            background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(129,199,132,0.6) 35%, transparent 100%);
             animation-delay: 10s;
             animation-duration: 16s;
+            box-shadow: 0 0 14px rgba(255,255,255,0.7);
         }
 
-        @keyframes float {
+        @keyframes megaFloat {
             0% {
-                transform: translateY(100vh) rotate(0deg);
+                transform: translateY(100vh) translateX(0px) rotate(0deg) scale(0.5);
                 opacity: 0;
+                filter: blur(2px) hue-rotate(0deg);
             }
-            10% {
-                opacity: 1;
+            5% {
+                opacity: 0.8;
+                filter: blur(1px) hue-rotate(10deg);
             }
-            90% {
+            15% {
+                transform: translateY(85vh) translateX(20px) rotate(45deg) scale(0.8);
                 opacity: 1;
+                filter: blur(0.5px) hue-rotate(20deg);
+            }
+            30% {
+                transform: translateY(70vh) translateX(-15px) rotate(120deg) scale(1.1);
+                opacity: 0.9;
+                filter: blur(0px) hue-rotate(15deg);
+            }
+            50% {
+                transform: translateY(50vh) translateX(25px) rotate(200deg) scale(1.3);
+                opacity: 1;
+                filter: blur(0px) hue-rotate(-10deg);
+            }
+            70% {
+                transform: translateY(30vh) translateX(-10px) rotate(280deg) scale(1.1);
+                opacity: 0.8;
+                filter: blur(0.5px) hue-rotate(5deg);
+            }
+            85% {
+                transform: translateY(15vh) translateX(15px) rotate(330deg) scale(0.9);
+                opacity: 0.6;
+                filter: blur(1px) hue-rotate(-5deg);
+            }
+            95% {
+                opacity: 0.3;
+                filter: blur(1.5px) hue-rotate(-15deg);
             }
             100% {
-                transform: translateY(-100px) rotate(360deg);
+                transform: translateY(-10vh) translateX(0px) rotate(360deg) scale(0.3);
                 opacity: 0;
+                filter: blur(2px) hue-rotate(-20deg);
             }
         }
 
@@ -1641,5 +1796,5 @@
         displayInitiatives();
         displayIdeas();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98fa2d9e85f94d53',t:'MTc2MDY0NTIwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98fa353851244d53',t:'MTc2MDY0NTUxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

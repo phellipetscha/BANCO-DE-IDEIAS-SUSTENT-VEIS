@@ -14,9 +14,18 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ffffff;
+            background: linear-gradient(135deg, #2e7d32 0%, #4caf50 25%, #66bb6a 50%, #81c784 75%, #a5d6a7 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             color: #333;
             line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .container {
@@ -26,20 +35,54 @@
         }
 
         header {
-            background: linear-gradient(135deg, #3bbe41, #32be35);
+            background: linear-gradient(135deg, #2e7d32, #4caf50, #66bb6a, #81c784);
+            background-size: 300% 300%;
+            animation: headerGlow 8s ease infinite;
             color: white;
-            padding: 2rem 0;
+            padding: 3rem 0;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: sparkle 6s linear infinite;
+        }
+
+        @keyframes headerGlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes sparkle {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         h1 {
-            font-size: 2.8rem;
+            font-size: 3.5rem;
             margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: titlePulse 3s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .subtitle {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             opacity: 0.9;
         }
 
@@ -60,25 +103,45 @@
         }
 
         .nav-btn {
-            background: #32be35;
+            background: linear-gradient(45deg, #4caf50, #66bb6a);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
+            padding: 15px 30px;
+            border-radius: 30px;
             cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
         }
 
         .nav-btn:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            background: linear-gradient(45deg, #45a049, #5cb85c);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.6);
         }
 
         .nav-btn.active {
-            background: #2e7d32;
+            background: linear-gradient(45deg, #2e7d32, #388e3c);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.5);
+            transform: translateY(-2px);
         }
 
         .section {
@@ -92,12 +155,31 @@
         }
 
         .card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2.5rem;
             margin: 2rem 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            border: 1px solid #e0e0e0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2e7d32, #4caf50, #66bb6a);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
         }
 
         .form-group {
@@ -142,36 +224,171 @@
         }
 
         .btn {
-            background: #4caf50;
+            background: linear-gradient(45deg, #4caf50, #66bb6a, #4caf50);
+            background-size: 200% 200%;
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
+            padding: 18px 36px;
+            border-radius: 30px;
             cursor: pointer;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
-            background: #45a049;
-            transform: translateY(-2px);
+            background-position: 100% 100%;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.6);
+            animation: btnGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes btnGlow {
+            from { box-shadow: 0 10px 30px rgba(76, 175, 80, 0.6); }
+            to { box-shadow: 0 10px 30px rgba(76, 175, 80, 0.8), 0 0 20px rgba(76, 175, 80, 0.4); }
         }
 
         .result-card {
-            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
-            border: 2px solid #32be35;
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9, #e8f5e8);
+            background-size: 200% 200%;
+            animation: resultShimmer 4s ease-in-out infinite;
+            border: 3px solid #4caf50;
             text-align: center;
-            padding: 2rem;
+            padding: 3rem;
             margin: 2rem 0;
-            border-radius: 15px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(76, 175, 80, 0.1), transparent);
+            animation: resultSpin 8s linear infinite;
+        }
+
+        @keyframes resultShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes resultSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .carbon-result {
-            font-size: 3rem;
+            font-size: 4rem;
             font-weight: bold;
             color: #2e7d32;
             margin: 1rem 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: numberPulse 2s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes numberPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .particle:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 12s;
+        }
+
+        .particle:nth-child(2) {
+            left: 20%;
+            animation-delay: 2s;
+            animation-duration: 15s;
+        }
+
+        .particle:nth-child(3) {
+            left: 40%;
+            animation-delay: 4s;
+            animation-duration: 10s;
+        }
+
+        .particle:nth-child(4) {
+            left: 60%;
+            animation-delay: 6s;
+            animation-duration: 18s;
+        }
+
+        .particle:nth-child(5) {
+            left: 80%;
+            animation-delay: 8s;
+            animation-duration: 14s;
+        }
+
+        .particle:nth-child(6) {
+            left: 90%;
+            animation-delay: 10s;
+            animation-duration: 16s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         .tips-grid {
@@ -182,10 +399,37 @@
         }
 
         .tip-card {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid #32be35;
+            background: linear-gradient(135deg, rgba(248, 249, 250, 0.9), rgba(255, 255, 255, 0.9));
+            backdrop-filter: blur(5px);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid #4caf50;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .tip-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(76, 175, 80, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tip-card:hover::before {
+            opacity: 1;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.2);
+            border-left-width: 6px;
         }
 
         .tip-card h4 {
@@ -267,6 +511,14 @@
         <div class="container">
             <h1>🌱 EcoVida</h1>
             <p class="subtitle">Transformando ideias em ações sustentáveis</p>
+        </div>
+        <div class="floating-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
         </div>
     </header>
 
@@ -811,6 +1063,17 @@
 
         let ideas = [
             {
+                title: "Smoothie de cascas de frutas",
+                category: "alimentacao",
+                description: "Aproveite cascas de maçã, pêra e outras frutas para fazer smoothies nutritivos. Lave bem as cascas, bata no liquidificador com água e mel. Rico em fibras e vitaminas!",
+                difficulty: "facil",
+                author: "Ana Silva",
+                rating: 4.8,
+                votes: 24,
+                date: new Date('2024-01-15'),
+                id: 'idea_1_smoothie_cascas'
+            },
+            {
                 title: "Carona solidária no trabalho",
                 category: "transporte",
                 description: "Organize um grupo de WhatsApp com colegas de trabalho para compartilhar caronas. Divida os custos de combustível e reduza o trânsito. Uma pessoa pode dirigir por semana.",
@@ -876,6 +1139,17 @@
                 date: new Date('2024-01-12'),
                 id: 'idea_7_horta_vertical'
             },
+            {
+                title: "Receita de hambúrguer de lentilha",
+                category: "alimentacao",
+                description: "Cozinhe 1 xícara de lentilha, amasse com alho, cebola, aveia e temperos. Forme hambúrgueres e asse por 20min. Rico em proteínas vegetais e muito saboroso!",
+                difficulty: "medio",
+                author: "Roberto Alves",
+                rating: 4.4,
+                votes: 19,
+                date: new Date('2024-01-16'),
+                id: 'idea_8_hamburguer_lentilha'
+            }
         ];
 
         // Navegação entre seções
@@ -1367,5 +1641,5 @@
         displayInitiatives();
         displayIdeas();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'988c5c979418c20f',t:'MTc1OTQ5MzY5Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98fa2d9e85f94d53',t:'MTc2MDY0NTIwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
